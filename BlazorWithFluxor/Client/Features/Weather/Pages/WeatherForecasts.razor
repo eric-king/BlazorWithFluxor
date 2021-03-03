@@ -1,0 +1,65 @@
+﻿@page "/weather"
+@inherits FluxorComponent
+
+@using BlazorWithFluxor.Shared
+@using BlazorWithFluxor.Client.Features.Weather.Store
+
+@inject IDispatcher Dispatcher
+@inject IState<WeatherState> WeatherState
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (_loading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in _forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <button class="btn btn-outline-info" @onclick="LoadForecasts">Refresh Forecasts</button>
+}
+
+@code {
+
+    private WeatherForecast[] _forecasts => WeatherState.Value.Forecasts;
+    private bool _loading => WeatherState.Value.Loading;
+
+    protected override void OnInitialized()
+    {
+        if (WeatherState.Value.Initialized == false)
+        {
+            LoadForecasts();
+            Dispatcher.Dispatch(new WeatherSetInitializedAction());
+        }
+        base.OnInitialized();
+    }
+
+    private void LoadForecasts()
+    {
+        Dispatcher.Dispatch(new WeatherLoadForecastsAction());
+    }
+
+}
