@@ -1,8 +1,10 @@
 ﻿@inherits FluxorComponent
 
 @using BlazorWithFluxor.Client.Features.Counter.Store
+@using BlazorWithFluxor.Client.Features.Weather.Store
 
 @inject IState<CounterState> CounterState
+@inject IState<WeatherState> WeatherState
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">BlazorWithFluxor</a>
@@ -25,7 +27,7 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="weather">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Weather
+                <span class="oi oi-list-rich" aria-hidden="true"></span> <span class="@WeatherItemClass">Weather</span>
             </NavLink>
         </li>
     </ul>
@@ -35,6 +37,7 @@
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string WeatherItemClass => WeatherState.Value.Loading ? "font-weight-bold" : null;
 
     private void ToggleNavMenu()
     {
