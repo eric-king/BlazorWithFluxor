@@ -1,4 +1,10 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inherits FluxorComponent
+
+@using BlazorWithFluxor.Client.Features.Counter.Store
+
+@inject IState<CounterState> CounterState
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">BlazorWithFluxor</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -14,7 +20,7 @@
         </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                <span class="oi oi-plus" aria-hidden="true"></span> Counter (@CounterState.Value.CurrentCount)
             </NavLink>
         </li>
         <li class="nav-item px-3">
