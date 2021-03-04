@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWithFluxor.Server", "BlazorWithFluxor\Server\BlazorWithFluxor.Server.csproj", "{B4D434BA-E01F-4BE3-8330-DC80E6AD08A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWithFluxor.Server", "BlazorWithFluxor\Server\BlazorWithFluxor.Server.csproj", "{B4D434BA-E01F-4BE3-8330-DC80E6AD08A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWithFluxor.Client", "BlazorWithFluxor\Client\BlazorWithFluxor.Client.csproj", "{0D3D37FC-D0C9-492F-8690-28189AED8480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWithFluxor.Client", "BlazorWithFluxor\Client\BlazorWithFluxor.Client.csproj", "{0D3D37FC-D0C9-492F-8690-28189AED8480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWithFluxor.Shared", "BlazorWithFluxor\Shared\BlazorWithFluxor.Shared.csproj", "{FA22CE95-17D0-4296-B106-A28B6F7DE9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWithFluxor.Shared", "BlazorWithFluxor\Shared\BlazorWithFluxor.Shared.csproj", "{FA22CE95-17D0-4296-B106-A28B6F7DE9FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
