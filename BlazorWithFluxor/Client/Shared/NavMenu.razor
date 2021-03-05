@@ -3,6 +3,8 @@
 @using BlazorWithFluxor.Client.Features.Counter.Store
 @using BlazorWithFluxor.Client.Features.Weather.Store
 
+@inject IToastService toastService
+@inject IActionSubscriber ActionSubscriber
 @inject IState<CounterState> CounterState
 @inject IState<WeatherState> WeatherState
 
@@ -43,6 +45,23 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private string WeatherItemClass => WeatherState.Value.Loading ? "font-weight-bold" : null;
+
+    protected override void OnInitialized()
+    {
+        ActionSubscriber.SubscribeToAction<WeatherSetForecastsAction>(this, ShowWeatherToast);
+        base.OnInitialized();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        ActionSubscriber.UnsubscribeFromAllActions(this);
+        base.Dispose(disposing);
+    }
+
+    private void ShowWeatherToast(WeatherSetForecastsAction action)
+    {
+        toastService.ShowInfo("Weather Forecasts have been updated!");
+    }
 
     private void ToggleNavMenu()
     {
