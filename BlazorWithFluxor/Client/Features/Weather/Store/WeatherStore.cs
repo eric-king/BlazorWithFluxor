@@ -37,16 +37,8 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         {
             return state with 
             {
-                Forecasts = action.Forecasts
-            };
-        }
-
-        [ReducerMethod]
-        public static WeatherState OnSetLoading(WeatherState state, WeatherSetLoadingAction action)
-        {
-            return state with
-            {
-                Loading = action.Loading
+                Forecasts = action.Forecasts,
+                Loading = false
             };
         }
 
@@ -56,6 +48,15 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
             return state with
             {
                 Initialized = true
+            };
+        }
+
+        [ReducerMethod(typeof(WeatherLoadForecastsAction))]
+        public static WeatherState OnLoadForecasts(WeatherState state)
+        {
+            return state with
+            {
+                Loading = true
             };
         }
     }
@@ -74,11 +75,8 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         [EffectMethod(typeof(WeatherLoadForecastsAction))]
         public async Task LoadForecasts(IDispatcher dispatcher) 
         {
-            dispatcher.Dispatch(new WeatherSetLoadingAction(true));
             var forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-            await Task.Delay(1000);
             dispatcher.Dispatch(new WeatherSetForecastsAction(forecasts));
-            dispatcher.Dispatch(new WeatherSetLoadingAction(false));
         }
 
         [EffectMethod(typeof(CounterIncrementAction))]
@@ -102,16 +100,6 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         public WeatherSetForecastsAction(WeatherForecast[] forecasts)
         {
             Forecasts = forecasts;
-        }
-    }
-
-    public class WeatherSetLoadingAction
-    {
-        public bool Loading { get; }
-
-        public WeatherSetLoadingAction(bool loading)
-        {
-            Loading = loading;
         }
     }
     #endregion
