@@ -4,7 +4,6 @@
 @using BlazorWithFluxor.Client.Features.Weather.Store
 
 @inject IToastService toastService
-@inject IActionSubscriber ActionSubscriber
 @inject IState<CounterState> CounterState
 @inject IState<WeatherState> WeatherState
 
@@ -48,14 +47,8 @@
 
     protected override void OnInitialized()
     {
-        ActionSubscriber.SubscribeToAction<WeatherSetForecastsAction>(this, ShowWeatherToast);
+        SubscribeToAction<WeatherSetForecastsAction>(ShowWeatherToast);
         base.OnInitialized();
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        ActionSubscriber.UnsubscribeFromAllActions(this);
-        base.Dispose(disposing);
     }
 
     private void ShowWeatherToast(WeatherSetForecastsAction action)
