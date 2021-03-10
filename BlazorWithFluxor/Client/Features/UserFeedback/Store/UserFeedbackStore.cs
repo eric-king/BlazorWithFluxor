@@ -30,31 +30,33 @@ namespace BlazorWithFluxor.Client.Features.UserFeedback.Store
         }
     }
 
-    public static class UserFeedbackReducers 
+    public static class UserFeedbackReducers
     {
-        [ReducerMethod]
-        public static UserFeedbackState OnSetSubmitting(UserFeedbackState state, UserFeedbackSetSubmittingAction action) 
+        [ReducerMethod(typeof(UserFeedbackSubmitAction))]
+        public static UserFeedbackState OnSubmit(UserFeedbackState state) 
+        {
+            return state with 
+            {
+                Submitting = true
+            };
+        }
+
+        [ReducerMethod(typeof(UserFeedbackSubmitSuccessAction))]
+        public static UserFeedbackState OnSubmitSuccess(UserFeedbackState state)
         {
             return state with
             {
-                Submitting = action.Submitting
+                Submitting = false,
+                Submitted = true
             };
         }
 
         [ReducerMethod]
-        public static UserFeedbackState OnSetSubmitted(UserFeedbackState state, UserFeedbackSetSubmittedAction action)
+        public static UserFeedbackState OnSubmitFailure(UserFeedbackState state, UserFeedbackSubmitFailureAction action)
         {
             return state with
             {
-                Submitted = action.Submitted
-            };
-        }
-
-        [ReducerMethod]
-        public static UserFeedbackState OnSetErrorMessage(UserFeedbackState state, UserFeedbackSetErrorMessageAction action)
-        {
-            return state with
-            {
+                Submitting = false,
                 ErrorMessage = action.ErrorMessage
             };
         }
@@ -71,51 +73,28 @@ namespace BlazorWithFluxor.Client.Features.UserFeedback.Store
         [EffectMethod]
         public async Task SubmitUserFeedback(UserFeedbackSubmitAction action, IDispatcher dispatcher) 
         {
-            dispatcher.Dispatch(new UserFeedbackSetSubmittingAction(true));
-            
             await Task.Delay(500); // just so we can see the "submitting" message
-            
             var response = await _httpClient.PostAsJsonAsync("Feedback", action.UserFeedbackModel);
 
             if (response.IsSuccessStatusCode)
             {
-                dispatcher.Dispatch(new UserFeedbackSetSubmittedAction(true));
-                dispatcher.Dispatch(new UserFeedbackSetSubmittingAction(false));
+                dispatcher.Dispatch(new UserFeedbackSubmitSuccessAction());
             }
             else 
             {
-                dispatcher.Dispatch(new UserFeedbackSetErrorMessageAction(response.ReasonPhrase));
-                dispatcher.Dispatch(new UserFeedbackSetSubmittingAction(false));
+                dispatcher.Dispatch(new UserFeedbackSubmitFailureAction(response.ReasonPhrase));
             }            
         }
     }
 
     #region UserFeedbackActions
-    public class UserFeedbackSetSubmittingAction 
-    {
-        public bool Submitting { get; }
 
-        public UserFeedbackSetSubmittingAction(bool submitting)
-        {
-            Submitting = submitting;
-        }
-    }
+    public class UserFeedbackSubmitSuccessAction { }
 
-    public class UserFeedbackSetSubmittedAction
-    {
-        public bool Submitted { get; }
-
-        public UserFeedbackSetSubmittedAction(bool submitted)
-        {
-            Submitted = submitted;
-        }
-    }
-
-    public class UserFeedbackSetErrorMessageAction
+    public class UserFeedbackSubmitFailureAction 
     {
         public string ErrorMessage { get; }
-
-        public UserFeedbackSetErrorMessageAction(string errorMessage)
+        public UserFeedbackSubmitFailureAction(string errorMessage)
         {
             ErrorMessage = errorMessage;
         }
