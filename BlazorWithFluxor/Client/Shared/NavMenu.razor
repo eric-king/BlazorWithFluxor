@@ -3,9 +3,9 @@
 @using BlazorWithFluxor.Client.Features.Counter.Store
 @using BlazorWithFluxor.Client.Features.Weather.Store
 
-@inject IToastService toastService
 @inject IState<CounterState> CounterState
 @inject IState<WeatherState> WeatherState
+@inject IDispatcher Dispatcher
 
 <div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">BlazorWithFluxor</a>
@@ -44,17 +44,6 @@
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private string WeatherItemClass => WeatherState.Value.Loading ? "font-weight-bold" : null;
-
-    protected override void OnInitialized()
-    {
-        SubscribeToAction<WeatherSetForecastsAction>(ShowWeatherToast);
-        base.OnInitialized();
-    }
-
-    private void ShowWeatherToast(WeatherSetForecastsAction action)
-    {
-        toastService.ShowInfo("Weather Forecasts have been updated!");
-    }
 
     private void ToggleNavMenu()
     {
