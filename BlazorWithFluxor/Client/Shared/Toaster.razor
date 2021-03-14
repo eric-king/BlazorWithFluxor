@@ -10,6 +10,15 @@
     {
         SubscribeToAction<WeatherSetForecastsAction>(ShowWeatherToast);
 
+        SubscribeToAction<WeatherLoadStateSuccessAction>(ShowWeatherLoadStateSuccessToast);
+        SubscribeToAction<WeatherLoadStateFailureAction>(ShowWeatherLoadStateFailureToast);
+
+        SubscribeToAction<WeatherPersistStateSuccessAction>(ShowWeatherPersistStateSuccessToast);
+        SubscribeToAction<WeatherPersistStateFailureAction>(ShowWeatherPersistStateFailureToast);
+
+        SubscribeToAction<WeatherClearStateSuccessAction>(ShowWeatherClearStateSuccessToast);
+        SubscribeToAction<WeatherClearStateFailureAction>(ShowWeatherClearStateFailureToast);
+
         SubscribeToAction<CounterLoadStateSuccessAction>(ShowCounterLoadStateSuccessToast);
         SubscribeToAction<CounterLoadStateFailureAction>(ShowCounterLoadStateFailureToast);
 
@@ -25,6 +34,36 @@
     private void ShowWeatherToast(WeatherSetForecastsAction action)
     {
         toastService.ShowInfo("Weather Forecasts have been updated!");
+    }
+
+    private void ShowWeatherLoadStateSuccessToast(WeatherLoadStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState loaded!");
+    }
+
+    private void ShowWeatherLoadStateFailureToast(WeatherLoadStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading WeatherState: {action.ErrorMessage}");
+    }
+
+    private void ShowWeatherPersistStateSuccessToast(WeatherPersistStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState saved!");
+    }
+
+    private void ShowWeatherPersistStateFailureToast(WeatherPersistStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading WeatherState: {action.ErrorMessage}");
+    }
+
+    private void ShowWeatherClearStateSuccessToast(WeatherClearStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState cleared!");
+    }
+
+    private void ShowWeatherClearStateFailureToast(WeatherClearStateFailureAction action)
+    {
+        toastService.ShowError($"Error clearing WeatherState: {action.ErrorMessage}");
     }
 
     private void ShowCounterLoadStateSuccessToast(CounterLoadStateSuccessAction action)
