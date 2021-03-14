@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.LocalStorage" Version="3.0.0" />
     <PackageReference Include="Blazored.Toast" Version="3.1.2" />
     <PackageReference Include="Fluxor" Version="4.0.0" />
     <PackageReference Include="Fluxor.Blazor.Web" Version="4.0.0" />

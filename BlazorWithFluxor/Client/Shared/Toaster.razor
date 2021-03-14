@@ -1,0 +1,98 @@
+﻿@inherits FluxorComponent
+
+@using BlazorWithFluxor.Client.Features.Counter.Store
+@using BlazorWithFluxor.Client.Features.Weather.Store
+
+@inject IToastService toastService
+
+@code {
+    protected override void OnInitialized()
+    {
+        SubscribeToAction<WeatherSetForecastsAction>(ShowWeatherToast);
+
+        SubscribeToAction<WeatherLoadStateSuccessAction>(ShowWeatherLoadStateSuccessToast);
+        SubscribeToAction<WeatherLoadStateFailureAction>(ShowWeatherLoadStateFailureToast);
+
+        SubscribeToAction<WeatherPersistStateSuccessAction>(ShowWeatherPersistStateSuccessToast);
+        SubscribeToAction<WeatherPersistStateFailureAction>(ShowWeatherPersistStateFailureToast);
+
+        SubscribeToAction<WeatherClearStateSuccessAction>(ShowWeatherClearStateSuccessToast);
+        SubscribeToAction<WeatherClearStateFailureAction>(ShowWeatherClearStateFailureToast);
+
+        SubscribeToAction<CounterLoadStateSuccessAction>(ShowCounterLoadStateSuccessToast);
+        SubscribeToAction<CounterLoadStateFailureAction>(ShowCounterLoadStateFailureToast);
+
+        SubscribeToAction<CounterPersistStateSuccessAction>(ShowCounterPersistStateSuccessToast);
+        SubscribeToAction<CounterPersistStateFailureAction>(ShowCounterPersistStateFailureToast);
+
+        SubscribeToAction<CounterClearStateSuccessAction>(ShowCounterClearStateSuccessToast);
+        SubscribeToAction<CounterClearStateFailureAction>(ShowCounterClearStateFailureToast);
+
+        base.OnInitialized();
+    }
+
+    private void ShowWeatherToast(WeatherSetForecastsAction action)
+    {
+        toastService.ShowInfo("Weather Forecasts have been updated!");
+    }
+
+    private void ShowWeatherLoadStateSuccessToast(WeatherLoadStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState loaded!");
+    }
+
+    private void ShowWeatherLoadStateFailureToast(WeatherLoadStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading WeatherState: {action.ErrorMessage}");
+    }
+
+    private void ShowWeatherPersistStateSuccessToast(WeatherPersistStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState saved!");
+    }
+
+    private void ShowWeatherPersistStateFailureToast(WeatherPersistStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading WeatherState: {action.ErrorMessage}");
+    }
+
+    private void ShowWeatherClearStateSuccessToast(WeatherClearStateSuccessAction action)
+    {
+        toastService.ShowSuccess("WeatherState cleared!");
+    }
+
+    private void ShowWeatherClearStateFailureToast(WeatherClearStateFailureAction action)
+    {
+        toastService.ShowError($"Error clearing WeatherState: {action.ErrorMessage}");
+    }
+
+    private void ShowCounterLoadStateSuccessToast(CounterLoadStateSuccessAction action)
+    {
+        toastService.ShowSuccess("CounterState loaded!");
+    }
+
+    private void ShowCounterLoadStateFailureToast(CounterLoadStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading CounterState: {action.ErrorMessage}");
+    }
+
+    private void ShowCounterPersistStateSuccessToast(CounterPersistStateSuccessAction action)
+    {
+        toastService.ShowSuccess("CounterState saved!");
+    }
+
+    private void ShowCounterPersistStateFailureToast(CounterPersistStateFailureAction action)
+    {
+        toastService.ShowError($"Error loading CounterState: {action.ErrorMessage}");
+    }
+
+    private void ShowCounterClearStateSuccessToast(CounterClearStateSuccessAction action)
+    {
+        toastService.ShowSuccess("CounterState cleared!");
+    }
+
+    private void ShowCounterClearStateFailureToast(CounterClearStateFailureAction action)
+    {
+        toastService.ShowError($"Error clearing CounterState: {action.ErrorMessage}");
+    }
+}

@@ -1,0 +1,32 @@
+﻿@inherits FluxorComponent
+
+@using BlazorWithFluxor.Client.Features.Counter.Store
+@using BlazorWithFluxor.Client.Features.Weather.Store
+
+@inject IDispatcher Dispatcher
+@inject IState<WeatherState> WeatherState
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        SubscribeToAction<WeatherLoadForecastsSuccessAction>(action => PersistWeatherState());
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            Dispatcher.Dispatch(new CounterLoadStateAction());
+            Dispatcher.Dispatch(new WeatherLoadStateAction());
+        }
+    }
+
+    private void PersistWeatherState()
+    {
+        Dispatcher.Dispatch(new WeatherPersistStateAction(WeatherState.Value));
+    }
+}
