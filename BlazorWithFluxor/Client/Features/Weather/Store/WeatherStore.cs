@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorWithFluxor.Client.Features.Weather.Store
 {
-    public record WeatherState 
+    public record WeatherState
     {
         public bool Initialized { get; init; }
         public bool Loading { get; init; }
@@ -31,23 +31,15 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         }
     }
 
-    public static class WeatherReducers 
+    public static class WeatherReducers
     {
         [ReducerMethod]
-        public static WeatherState OnSetForecasts(WeatherState state, WeatherSetForecastsAction action) 
-        {
-            return state with 
-            {
-                Forecasts = action.Forecasts,
-                Loading = false
-            };
-        }
-
-        [ReducerMethod(typeof(WeatherSetInitializedAction))]
-        public static WeatherState OnSetInitialized(WeatherState state)
+        public static WeatherState OnSetForecasts(WeatherState state, WeatherSetForecastsAction action)
         {
             return state with
             {
+                Forecasts = action.Forecasts,
+                Loading = false,
                 Initialized = true
             };
         }
@@ -68,7 +60,7 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         }
     }
 
-    public class WeatherEffects 
+    public class WeatherEffects
     {
         private readonly HttpClient Http;
         private readonly IState<CounterState> CounterState;
@@ -83,7 +75,7 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         }
 
         [EffectMethod(typeof(WeatherLoadForecastsAction))]
-        public async Task LoadForecasts(IDispatcher dispatcher) 
+        public async Task LoadForecasts(IDispatcher dispatcher)
         {
             var forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
             dispatcher.Dispatch(new WeatherSetForecastsAction(forecasts));
@@ -91,10 +83,10 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
         }
 
         [EffectMethod(typeof(CounterIncrementAction))]
-        public async Task LoadForecastsOnIncrement(IDispatcher dispatcher) 
+        public async Task LoadForecastsOnIncrement(IDispatcher dispatcher)
         {
             await Task.Delay(0);
-            if (CounterState.Value.CurrentCount % 10 == 0) 
+            if (CounterState.Value.CurrentCount % 10 == 0)
             {
                 dispatcher.Dispatch(new WeatherLoadForecastsAction());
             }
@@ -138,7 +130,7 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
             try
             {
                 await _localStorageService.RemoveItemAsync(WeatherStatePersistenceName);
-                dispatcher.Dispatch(new WeatherSetStateAction(new WeatherState 
+                dispatcher.Dispatch(new WeatherSetStateAction(new WeatherState
                 {
                     Initialized = false,
                     Loading = false,
@@ -154,66 +146,18 @@ namespace BlazorWithFluxor.Client.Features.Weather.Store
     }
 
     #region WeatherActions
-    public class WeatherSetInitializedAction { }
-    public class WeatherLoadForecastsAction { }
-    public class WeatherLoadForecastsSuccessAction { }
-    public class WeatherSetForecastsAction
-    {
-        public WeatherForecast[] Forecasts { get; }
-
-        public WeatherSetForecastsAction(WeatherForecast[] forecasts)
-        {
-            Forecasts = forecasts;
-        }
-    }
-
-    public class WeatherSetStateAction
-    {
-        public WeatherState WeatherState { get; }
-        public WeatherSetStateAction(WeatherState weatherState)
-        {
-            WeatherState = weatherState;
-        }
-    }
-
-    public class WeatherLoadStateAction { }
-    public class WeatherLoadStateSuccessAction { }
-    public class WeatherLoadStateFailureAction
-    {
-        public string ErrorMessage { get; }
-        public WeatherLoadStateFailureAction(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
-    }
-
-    public class WeatherPersistStateAction
-    {
-        public WeatherState WeatherState { get; }
-        public WeatherPersistStateAction(WeatherState weatherState)
-        {
-            WeatherState = weatherState;
-        }
-    }
-    public class WeatherPersistStateSuccessAction { }
-    public class WeatherPersistStateFailureAction
-    {
-        public string ErrorMessage { get; }
-        public WeatherPersistStateFailureAction(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
-    }
-
-    public class WeatherClearStateAction { }
-    public class WeatherClearStateSuccessAction { }
-    public class WeatherClearStateFailureAction
-    {
-        public string ErrorMessage { get; }
-        public WeatherClearStateFailureAction(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
-    }
+    public record WeatherLoadForecastsAction();
+    public record WeatherLoadForecastsSuccessAction();
+    public record WeatherSetForecastsAction(WeatherForecast[] Forecasts);
+    public record WeatherSetStateAction(WeatherState WeatherState);
+    public record WeatherLoadStateAction();
+    public record WeatherLoadStateSuccessAction();
+    public record WeatherLoadStateFailureAction(string ErrorMessage);
+    public record WeatherPersistStateAction(WeatherState WeatherState);
+    public record WeatherPersistStateSuccessAction();
+    public record WeatherPersistStateFailureAction(string ErrorMessage);
+    public record WeatherClearStateAction();
+    public record WeatherClearStateSuccessAction();
+    public record WeatherClearStateFailureAction(string ErrorMessage);
     #endregion
 }

@@ -52,7 +52,6 @@ else
         if (WeatherState.Value.Initialized == false)
         {
             LoadForecasts();
-            Dispatcher.Dispatch(new WeatherSetInitializedAction());
         }
         base.OnInitialized();
     }

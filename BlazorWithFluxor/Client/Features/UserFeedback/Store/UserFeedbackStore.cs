@@ -88,26 +88,8 @@ namespace BlazorWithFluxor.Client.Features.UserFeedback.Store
     }
 
     #region UserFeedbackActions
-
-    public class UserFeedbackSubmitSuccessAction { }
-
-    public class UserFeedbackSubmitFailureAction 
-    {
-        public string ErrorMessage { get; }
-        public UserFeedbackSubmitFailureAction(string errorMessage)
-        {
-            ErrorMessage = errorMessage;
-        }
-    }
-
-    public class UserFeedbackSubmitAction 
-    {
-        public UserFeedbackModel UserFeedbackModel { get; }
-
-        public UserFeedbackSubmitAction(UserFeedbackModel userFeedbackModel)
-        {
-            UserFeedbackModel = userFeedbackModel;
-        }
-    }
+    public record UserFeedbackSubmitSuccessAction();
+    public record UserFeedbackSubmitFailureAction(string ErrorMessage);
+    public record UserFeedbackSubmitAction(UserFeedbackModel UserFeedbackModel);
     #endregion 
 }
