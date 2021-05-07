@@ -14,6 +14,7 @@
 <button class="btn btn-outline-primary" @onclick="SaveCount">Save</button>
 <button class="btn btn-outline-info" @onclick="LoadCount">Load</button>
 <button class="btn btn-outline-danger" @onclick="ClearCount">Clear</button>
+<button class="btn btn-outline-warning" @onclick="SendCount">Broadcast</button>
 
 @code {
 
@@ -35,5 +36,10 @@
     private void ClearCount()
     {
         Dispatcher.Dispatch(new CounterClearStateAction());
+    }
+
+    private void SendCount()
+    {
+        Dispatcher.Dispatch(new CounterSendCountAction(CounterState.Value.CurrentCount));
     }
 }

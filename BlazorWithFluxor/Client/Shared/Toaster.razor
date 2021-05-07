@@ -28,6 +28,8 @@
         SubscribeToAction<CounterClearStateSuccessAction>(ShowCounterClearStateSuccessToast);
         SubscribeToAction<CounterClearStateFailureAction>(ShowCounterClearStateFailureToast);
 
+        SubscribeToAction<CounterReceiveCountAction>(ShowCountReceivedToast);
+
         base.OnInitialized();
     }
 
@@ -94,5 +96,10 @@
     private void ShowCounterClearStateFailureToast(CounterClearStateFailureAction action)
     {
         toastService.ShowError($"Error clearing CounterState: {action.ErrorMessage}");
+    }
+
+    private void ShowCountReceivedToast(CounterReceiveCountAction action)
+    {
+        toastService.ShowSuccess($"Count received: {action.Count}");
     }
 }

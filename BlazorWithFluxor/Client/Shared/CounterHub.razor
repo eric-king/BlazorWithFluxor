@@ -1,0 +1,36 @@
+﻿@inherits FluxorComponent
+
+@using Microsoft.AspNetCore.SignalR.Client
+@using BlazorWithFluxor.Client.Features.Counter.Store
+
+@inject IDispatcher Dispatcher
+@inject NavigationManager NavigationManager
+
+@code {
+    private HubConnection hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        hubConnection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/counterhub")).Build();
+        hubConnection.On<int>("ReceiveCount", ReceiveCount);
+        await hubConnection.StartAsync();
+
+        SubscribeToAction<CounterSendCountAction>(SendCount);
+    }
+
+    private void ReceiveCount(int count)
+    {
+        Dispatcher.Dispatch(new CounterReceiveCountAction(count));
+    }
+
+    private void SendCount(CounterSendCountAction action)
+    {
+        if (hubConnection.State == HubConnectionState.Connected)
+        {
+            hubConnection.SendAsync("SendCount", action.Count);
+        }
+    }
+
+}
