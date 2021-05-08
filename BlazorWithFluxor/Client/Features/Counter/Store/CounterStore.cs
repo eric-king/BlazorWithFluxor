@@ -101,8 +101,6 @@ namespace BlazorWithFluxor.Client.Features.Counter.Store
 
     #region CounterActions
     public record CounterIncrementAction();
-    public record CounterReceiveCountAction(int Count);
-    public record CounterSendCountAction(int Count);
     public record CounterSetStateAction(CounterState CounterState);
     public record CounterPersistStateAction(CounterState CounterState);
     public record CounterPersistStateSuccessAction();

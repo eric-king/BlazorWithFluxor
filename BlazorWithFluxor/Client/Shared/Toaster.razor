@@ -2,6 +2,7 @@
 
 @using BlazorWithFluxor.Client.Features.Counter.Store
 @using BlazorWithFluxor.Client.Features.Weather.Store
+@using BlazorWithFluxor.Client.Features.Hubs.CounterHub
 
 @inject IToastService toastService
 
@@ -28,7 +29,9 @@
         SubscribeToAction<CounterClearStateSuccessAction>(ShowCounterClearStateSuccessToast);
         SubscribeToAction<CounterClearStateFailureAction>(ShowCounterClearStateFailureToast);
 
-        SubscribeToAction<CounterReceiveCountAction>(ShowCountReceivedToast);
+        SubscribeToAction<CounterHubReceiveCountAction>(ShowCountReceivedToast);
+        SubscribeToAction<CounterHubSendCountFailedAction>(ShowCountReceivedFailedToast);
+        SubscribeToAction<CounterHubSetConnectedAction>(ShowHubConnectedToast);
 
         base.OnInitialized();
     }
@@ -98,8 +101,25 @@
         toastService.ShowError($"Error clearing CounterState: {action.ErrorMessage}");
     }
 
-    private void ShowCountReceivedToast(CounterReceiveCountAction action)
+    private void ShowCountReceivedToast(CounterHubReceiveCountAction action)
     {
-        toastService.ShowSuccess($"Count received: {action.Count}");
+        toastService.ShowInfo($"Count received: {action.Count}");
+    }
+
+    private void ShowCountReceivedFailedToast(CounterHubSendCountFailedAction action)
+    {
+        toastService.ShowError($"Count could not be broadcast: {action.Message}");
+    }
+
+    private void ShowHubConnectedToast(CounterHubSetConnectedAction action)
+    {
+        if (action.Connected)
+        {
+            toastService.ShowSuccess($"CounterHub connected!");
+        }
+        else 
+        {
+            toastService.ShowError($"CounterHub disconnected!");
+        }
     }
 }

@@ -1,5 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
+@using BlazorWithFluxor.Client.Features.Hubs.CounterHub
+
+@inject IDispatcher Dispatcher
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -20,4 +24,11 @@
 
 <Toaster />
 <StateLoader />
-<CounterHub />
+
+@code { 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new CounterHubStartAction());
+    }
+} 
